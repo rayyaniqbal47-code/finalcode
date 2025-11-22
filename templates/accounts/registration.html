@@ -86,17 +86,7 @@
                         <p class="text-gray-600">Already have an account? <a href="#login" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold">Sign in here</a></p>
                     </div>
 
-                    <div class="text-center m-5">
-                        {% if messages %}
-                            <div class="space-y-2">  
-                                {% for message in messages %}
-                                    <div class="{{ message.tags }} border px-4 py-3 rounded relative inline-block text-left auto-hide-message">
-                                        <span>{{ message }}</span>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% include "tut/message.html" %}
 
 
                 </form>
@@ -129,17 +119,6 @@
     }
 </script>
 
-<script>
-    // Select all messages
-    const messages = document.querySelectorAll('.auto-hide-message');
-
-    messages.forEach(message => {
-        // Set timer to remove message after 8 seconds (8000 ms)
-        setTimeout(() => {
-            message.style.display = 'none';
-        }, 4000);
-    });
-</script>
 
 
 

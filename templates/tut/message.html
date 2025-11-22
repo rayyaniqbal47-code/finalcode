@@ -1,0 +1,41 @@
+{% if messages %}
+<div class="space-y-2">
+    {% for message in messages %}
+        <div class="{{ message.tags }} border px-4 py-3 rounded relative inline-block text-left auto-hide-message">
+            <span>{{ message }}</span>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<style>
+.auto-hide-message {
+    position: fixed;
+    bottom: -100px; /* Start off-screen */
+    right: 20px;
+    opacity: 0;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    animation: slideInOut 5s forwards;
+    z-index: 1000;
+}
+
+@keyframes slideInOut {
+    0% { bottom: -100px; opacity: 0; }
+    10% { bottom: 250px; opacity: 1; }  /* Slide even higher */
+    80% { bottom: 250px; opacity: 1; }  /* Stay visible */
+    100% { bottom: -100px; opacity: 0; } /* Slide back down */
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const messages = document.querySelectorAll('.auto-hide-message');
+    messages.forEach(message => {
+        message.addEventListener('animationend', () => {
+            message.remove();
+        });
+    });
+});
+</script>

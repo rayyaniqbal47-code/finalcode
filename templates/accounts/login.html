@@ -1,0 +1,96 @@
+{% extends "tut/base.html" %}
+
+{% block content %}
+
+<!-- ========== LOGIN PAGE - START ========== -->
+<div id="login" class="mb-12">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Login to Your Account</h2>
+    
+    <div class="bg-white rounded-xl shadow-md p-8 max-w-md mx-auto">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            
+            <!-- Email Field -->
+            <div class="mb-6">
+                <label class="block text-gray-700 mb-3 font-medium" for="login-email">Email Address</label>
+                <input type="email" id="login-email" name="email"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Enter your email" required>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="mb-6 relative">
+                <label class="block text-gray-700 mb-3 font-medium" for="login-password">Password</label>
+                <input type="password" id="login-password" name="password"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Enter your password" required>
+
+                <!-- Eye Icon -->
+                <button type="button" onclick="togglePassword('login-password', 'icon1')"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+                    <i id="icon1" class="fa-solid fa-eye"></i>
+                </button>
+            </div>
+            
+            <!-- Forgot Password Link -->
+            <div class="flex justify-between items-center mb-6">
+                <a href="#forgot-password" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">Forgot password?</a>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit"
+                class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-lg mb-6">
+                Login
+            </button>
+            
+            <!-- Sign Up Link -->
+            <div class="text-center">
+                <p class="text-gray-600">Don't have an account? 
+                    <a href="#register" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold">
+                        Sign up here
+                    </a>
+                </p>
+            </div>
+
+            {% include "tut/message.html" %}
+
+        </form>
+    </div>
+</div>
+<!-- ========== LOGIN PAGE - END ========== -->
+
+
+
+{% endblock content %}
+
+
+{% block script %}
+
+
+<script>
+    function togglePassword(inputId, iconId) {
+        const field = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (field.type === "password") {
+            field.type = "text";
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    }
+</script>
+
+
+
+
+
+{% endblock script %}
+
+
+
+
+
+
+

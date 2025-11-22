@@ -144,3 +144,12 @@ MESSAGE_TAGS = {
     messages.ERROR: "bg-red-100 text-red-800",
 }
 
+# Redirect users to this URL if they are not logged in
+LOGIN_URL = 'login'
+
+# Where to redirect after a successful login
+LOGIN_REDIRECT_URL = 'myAccount'
+
+# Redirect to homepage after logout
+LOGOUT_REDIRECT_URL = 'login'  
+
