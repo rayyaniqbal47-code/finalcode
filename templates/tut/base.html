@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerConnect - Job Portal</title>
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans">
+
+    {% include "tut/header.html" %}
+
+    
+
+    <div class="container mx-auto px-4 py-8">
+
+        {% block content %}{% endblock content %}
+
+
+    </div>
+
+    {% block script %}{% endblock script %}
+
+
+    {% include "tut/footer.html" %}
+
+
+</body>
+</html>
+
+

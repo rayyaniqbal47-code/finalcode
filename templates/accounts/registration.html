@@ -1,0 +1,153 @@
+{% extends "tut/base.html" %}
+
+{% block content %}
+
+
+        <!-- ========== REGISTRATION PAGE - START ========== -->
+        <div id="register" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Create Your Account</h2>
+            
+            <div class="bg-white rounded-xl shadow-md p-8 max-w-2xl mx-auto">
+                <form action="{% url 'registration' %}" method='post'>
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-gray-700 mb-3 font-medium" for="first-name">First Name</label>
+                            {{ form.first_name }}
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 mb-3 font-medium" for="last-name">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-3 font-medium" for="register-email">Username</label>
+                        {{ form.username }}
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-3 font-medium" for="register-email">Email Address</label>
+                        {{ form.email }}
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                        <!-- PASSWORD -->
+                        <div class="relative">
+                            <label class="block text-gray-700 mb-3 font-medium" for="register-password">
+                                Password
+                            </label>
+
+                            {{ form.password }}
+
+                            <!-- Eye Icon -->
+                            <button type="button" onclick="togglePassword('register-password', 'icon1')" class="absolute right-4 top-[52px] text-gray-500">
+                                <i id="icon1" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <!-- CONFIRM PASSWORD -->
+                        <div class="relative">
+                            <label class="block text-gray-700 mb-3 font-medium" for="confirm-password">
+                                Confirm Password
+                            </label>
+
+                            {{ form.confirm_password }}
+
+                            <!-- Eye Icon -->
+                            <button type="button" onclick="togglePassword('confirm-password', 'icon2')" class="absolute right-4 top-[52px] text-gray-500"   >
+                                <i id="icon2" class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    
+                    <ul class='errorlist'>
+                        {% for field in form %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <li class='text-red-500'>
+                                        {{error}}
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <li class='text-red-500'>
+                            {{form.non_field_errors}}
+                        </li>
+                    </ul>
+                    
+                    <input type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-lg mb-6">
+                    
+                    <div class="text-center">
+                        <p class="text-gray-600">Already have an account? <a href="#login" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold">Sign in here</a></p>
+                    </div>
+
+                    <div class="text-center m-5">
+                        {% if messages %}
+                            <div class="space-y-2">  
+                                {% for message in messages %}
+                                    <div class="{{ message.tags }} border px-4 py-3 rounded relative inline-block text-left auto-hide-message">
+                                        <span>{{ message }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+        <!-- ========== REGISTRATION PAGE - END ========== -->
+
+
+
+
+
+
+{% endblock content %}
+
+
+{% block script %}
+
+<script>
+    function togglePassword(inputId, iconId) {
+        const field = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (field.type === "password") {
+            field.type = "text";
+            icon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    }
+</script>
+
+<script>
+    // Select all messages
+    const messages = document.querySelectorAll('.auto-hide-message');
+
+    messages.forEach(message => {
+        // Set timer to remove message after 8 seconds (8000 ms)
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, 4000);
+    });
+</script>
+
+
+
+{% endblock script %}
+
+
+
+
+
+
+
