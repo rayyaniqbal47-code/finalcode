@@ -1,0 +1,68 @@
+{% extends "tut/base.html" %}
+
+{% block content %}
+
+<!-- ========== ADD EXPERIENCE PAGE - START ========== -->
+<div id="add-experience" class="mb-12">
+    <!-- Header with Back Button -->
+    <div class="flex items-center mb-6">
+        <button class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </button>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">Add Work Experience</h2>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <!-- Experience Form -->
+        <form method="post" action="{% url 'edit_experience' exp.pk %}" class="bg-white border border-gray-200 rounded-lg p-6">
+            {% csrf_token %}
+            
+            <div class="mb-6">
+                <h3 class="font-bold text-gray-800 text-lg mb-4">Work Experience Details</h3>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Company Name -->
+                <div>
+                    <label for="company_name" class="block text-gray-600 text-sm font-medium mb-2">
+                        Company Name *
+                    </label>
+                    {{form.company_name}}
+                </div>
+                
+                <!-- Role -->
+                <div>
+                    <label for="role" class="block text-gray-600 text-sm font-medium mb-2">
+                        Role *
+                    </label>
+                    {{form.role}}
+                </div>
+                
+                <!-- Years -->
+                <div>
+                    <label for="years" class="block text-gray-600 text-sm font-medium mb-2">
+                        Years *
+                    </label>
+                    {{form.years}}
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-end space-x-4 pt-6 mt-6 border-t border-gray-200">
+                <a href="{% url 'profile' %}" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300 font-semibold">
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300 font-semibold">
+                    Save Experience
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ========== ADD EXPERIENCE PAGE - END ========== -->
+
+{% endblock content %}
+
+
+

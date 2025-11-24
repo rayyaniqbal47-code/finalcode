@@ -23,6 +23,8 @@ urlpatterns = [
     
     path('admin_dashboard/' , include('adminsetup.urls')),
 
+    path('jobseeker_dashboard/' , include('jobseeker.urls')),
+
     
 
 ]

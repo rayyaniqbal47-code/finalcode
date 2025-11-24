@@ -3,7 +3,169 @@
 
 {% block content %}
 
-gfdgdf
+        <!-- ========== DASHBOARD PAGE - START ========== -->
+        <div id="dashboard" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">{{request.user.username}} Dashboard</h2>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-4">
+                    <!-- Sidebar -->
+                    <div class="lg:col-span-1 bg-gray-50 p-6 border-r border-gray-200">
+                        <div class="flex flex-col items-center mb-6">
+                            <div class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-3">JD</div>
+                            <h3 class="font-bold text-gray-800 text-lg">{{request.user.username}}</h3>                            
+                        </div>
+                        
+                        <ul class="space-y-2">
+                            <a class="flex items-center p-3 bg-blue-500 text-white rounded-lg">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+
+                            <a href="{% url 'profile' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-user mr-3"></i>
+                                <span>Profile</span>
+                            </a>
+
+                            <a href="#" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <span>My Applications</span>
+                            </a>
+
+                            <li class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-bookmark mr-3"></i>
+                                <span>Saved Jobs</span>
+                            </li>
+
+                            <a href="{% url 'add_skill' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-tools mr-3"></i>
+                                <span>Add Skill</span>
+                            </a>
+
+                            <a href="{% url 'add_education' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-graduation-cap mr-3"></i>
+                                <span>Add Education</span>
+                            </a>
+
+                            <a href="{% url 'add_experience' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-briefcase mr-3"></i>
+                                <span>Add Experience</span>
+                            </a>
+
+                            {% if request.user.is_authenticated and request.user.is_job_seeker %}
+                            <li class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                                <i class="fas fa-key mr-3"></i>
+                                <span>Password Change</span>
+                            </li>
+                            {% endif %}
+                        </ul>
+
+
+                        
+                    </div>
+                    
+                    <!-- Main Content -->
+                    <div class="lg:col-span-3 p-6">
+                        <!-- Stats Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                                <h3 class="font-bold text-gray-800">Applications</h3>
+                                <p class="text-2xl font-bold text-blue-500">12</p>
+                                <p class="text-sm text-gray-600">+2 this week</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                                <h3 class="font-bold text-gray-800">Interviews</h3>
+                                <p class="text-2xl font-bold text-green-500">3</p>
+                                <p class="text-sm text-gray-600">+1 this week</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                                <h3 class="font-bold text-gray-800">Saved Jobs</h3>
+                                <p class="text-2xl font-bold text-purple-500">8</p>
+                                <p class="text-sm text-gray-600">+3 this week</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Applications -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold text-gray-800 text-lg">Recent Applications</h3>
+                                <a href="#" class="text-blue-500 hover:text-blue-700 text-sm font-semibold">View All</a>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b border-gray-200">
+                                            <th class="text-left py-2 text-gray-600 font-medium">Position</th>
+                                            <th class="text-left py-2 text-gray-600 font-medium">Company</th>
+                                            <th class="text-left py-2 text-gray-600 font-medium">Date</th>
+                                            <th class="text-left py-2 text-gray-600 font-medium">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                            <td class="py-3 font-medium">Senior UX Designer</td>
+                                            <td class="py-3 text-gray-600">DesignHub</td>
+                                            <td class="py-3 text-gray-600">Jun 12, 2023</td>
+                                            <td class="py-3"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Under Review</span></td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                            <td class="py-3 font-medium">Product Manager</td>
+                                            <td class="py-3 text-gray-600">TechInnovate</td>
+                                            <td class="py-3 text-gray-600">Jun 5, 2023</td>
+                                            <td class="py-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Interview</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Recommended Jobs -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold text-gray-800 text-lg">Recommended Jobs</h3>
+                                <a href="#" class="text-blue-500 hover:text-blue-700 text-sm font-semibold">View All</a>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">Full Stack Developer</h4>
+                                        <p class="text-gray-600">Digital Creations • San Francisco, CA</p>
+                                        <div class="flex mt-2">
+                                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-2">Remote</span>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">$90k - $120k</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="text-gray-400 hover:text-blue-500">
+                                            <i class="far fa-bookmark text-xl"></i>
+                                        </button>
+                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Apply</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">UI/UX Designer</h4>
+                                        <p class="text-gray-600">Creative Minds • Remote</p>
+                                        <div class="flex mt-2">
+                                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-2">Full-time</span>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">$85k - $110k</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="text-blue-500 hover:text-blue-700">
+                                            <i class="fas fa-bookmark text-xl"></i>
+                                        </button>
+                                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ========== DASHBOARD PAGE - END ========== -->
+
 
 
 

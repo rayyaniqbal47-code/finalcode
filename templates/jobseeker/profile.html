@@ -1,0 +1,173 @@
+{% extends "tut/base.html" %}
+
+
+{% block content %}
+
+<!-- ========== JOB SEEKER PROFILE PAGE - START ========== -->
+<div id="jobseeker-profile" class="mb-12">
+    <!-- Header with Back Button -->
+    <div class="flex items-center mb-6">
+        <button class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </button>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">{{profile.customuser.username}} Profile</h2>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <!-- Personal Information -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 text-lg">Personal Information</h3>
+                <a href="{% url 'edit_jobseekerprofile' %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-gray-600 text-sm">First Name</p>
+                    <p class="font-medium">{{profile.customuser.first_name}}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Last Name</p>
+                    <p class="font-medium">{{profile.customuser.last_name}}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Email</p>
+                    <p class="font-medium">{{profile.customuser.email}}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm">Total Years of Experience</p>
+                    <p class="font-medium">{{profile.total_years_of_experience|floatformat:"0"}}</p>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <p class="text-gray-600 text-sm">Bio</p>
+                <p class="font-medium mt-1">{{profile.bio}}</p>
+            </div>
+
+            <!-- Resume Upload - Now inside Personal Information -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800 text-lg">Resume</h3>
+                   
+                </div>
+                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-file-pdf text-red-500 text-2xl mr-3"></i>
+                        <div>
+                            <p class="font-medium">{{profile.resume_filename}}</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="{{ profile.resume.url }}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 text-lg">Skills</h3>
+                <a href="{% url 'add_skill' %}" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors duration-300 text-sm font-semibold">
+                    Add Skill
+                </a>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                {% for skill in skills %}
+                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center">
+                    {{skill.name|title}}
+                    <a href="{% url 'delete_skill' skill.pk %}" class="ml-2 text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 text-lg">Work Experience</h3>
+                <a href="{% url 'add_experience' %}" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors duration-300 text-sm font-semibold">
+                    Add Experience
+                </a>
+            </div>
+            <div class="space-y-4">
+                {% for experience in experiences %}
+                <!-- Experience -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800">{{experience.role|title}}</h4>
+                            <p class="text-gray-600">{{experience.company_name|title}}.</p>
+                            <p class="text-gray-500 text-sm">{{experience.years|floatformat:"0"}}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="{% url 'edit_experience' experience.pk %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_experience' experience.pk %}" class="text-red-500 hover:text-red-700 transition-colors duration-300">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 text-lg">Education</h3>
+                <a href="{% url 'add_education' %}" class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors duration-300 text-sm font-semibold">
+                    Add Education
+                </a>
+            </div>
+            <div class="space-y-4">
+                {% for education in educations %}
+                <!-- Education -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800">{{education.degree}}</h4>
+                            <p class="text-gray-600">{{education.institution_name|title}}</p>
+                            <p class="text-gray-500 text-sm">{{education.start_year}} - {{education.end_year}}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="{% url 'edit_education' education.pk %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'delete_education' education.pk %}" class="text-red-500 hover:text-red-700 transition-colors duration-300">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+            
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== JOB SEEKER PROFILE PAGE - END ========== -->
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+

@@ -65,9 +65,9 @@ class Job(models.Model):
     ]
 
     EXPERIENCE_LEVEL = [
-        ("entry", "Entry Level"),
-        ("mid", "Mid Level"),
-        ("senior", "Senior Level"),
+        ("Entry Level", "Entry Level"),
+        ("Mid Level", "Mid Level"),
+        ("Senior Level", "Senior Level"),
     ]
 
     title = models.CharField(max_length=255)

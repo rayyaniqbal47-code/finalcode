@@ -65,3 +65,6 @@ class AddJobForm(forms.ModelForm):
                 'placeholder': 'Select required skills'
             })
         }
+
+
+        

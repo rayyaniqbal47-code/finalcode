@@ -101,6 +101,13 @@ class CustomUserProfile(models.Model):
     def __str__(self):
         return  self.customuser.email if self.customuser else "No User"
     
+    @property
+    def resume_filename(self):
+        if self.resume:
+            return self.resume.name.split('/')[-1]
+        return ''
+    
+    
 
 
     
