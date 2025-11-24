@@ -195,27 +195,30 @@ def delete_education(request , pk):
 @login_required
 @user_passes_test(check_jobseeker_perms)
 def add_skill(request):
-
     profile = CustomUserProfile.objects.get(customuser=request.user)
-
 
     if request.method == "POST":
         form = SkillForm(request.POST)
         if form.is_valid():
-            skill_name = form.cleaned_data['name']
+            skill_name = form.cleaned_data['name'].strip().lower()
+
+            # Get or create the Skill object
             skill, created = Skill.objects.get_or_create(name=skill_name)
-            profile.skills.add(skill)
-            profile.save()
-            return redirect('profile') 
+
+            # Add the skill to the profile if not already added
+            if not profile.skills.filter(id=skill.id).exists():
+                profile.skills.add(skill)
+                profile.save()
+
+            return redirect('profile')
+        else:
+            print(form.errors)
 
     else:
-
         form = SkillForm()
 
-    context = {
-        'form': form,
-    }
-    return render(request , 'jobseeker/add_skill.html', context)
+    return render(request, 'jobseeker/add_skill.html', {'form': form})
+
 
 
 @login_required

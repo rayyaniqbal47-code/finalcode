@@ -115,6 +115,10 @@
                     <i class="fas fa-map-marker-alt text-gray-400 mr-3 w-5"></i>
                     <span class="text-gray-600">{{ job.state }}, {{ job.city }}</span>
                 </div>
+                <div class="flex items-center mt-2">
+                    <i class="fas fa-briefcase text-gray-400 mr-3 w-5"></i>
+                    <span class="text-gray-600">{{ job.total_years_of_experience_required|floatformat:"0" }} years of experience</span>
+                </div>
             </div>
         </div>
     </div>

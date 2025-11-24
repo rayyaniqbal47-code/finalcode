@@ -93,3 +93,17 @@ class Job(models.Model):
         return f"{self.title}"
     
 
+class EasyAuditLog(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user_id = models.IntegerField(null=True)
+    action = models.CharField(max_length=50)
+    object_id = models.CharField(max_length=255, null=True)
+    content_type_id = models.IntegerField(null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    additional_data = models.JSONField(null=True, blank=True)
+
+    class Meta:
+        db_table = "easy_audit_log"
+        managed = False
+
+

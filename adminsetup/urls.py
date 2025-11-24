@@ -14,5 +14,7 @@ urlpatterns = [
     path('jobseeker_users/' , views.jobseeker_users , name='jobseeker_users'),
     path('application/<int:pk>/suspend_user/', views.suspend_user, name='suspend_user'),
     path('application/<int:pk>/unsuspend_user/', views.unsuspend_user, name='unsuspend_user'),
+
+    path('admin_audit_dashboard/' , views.admin_audit_dashboard , name='admin_audit_dashboard'),
 ]
 

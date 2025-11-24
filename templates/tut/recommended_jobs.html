@@ -1,0 +1,67 @@
+{% extends 'tut/base.html' %}
+{% block content %}
+
+<!-- ========== RECOMMENDED JOBS PAGE - START ========== -->
+<div id="recommended-jobs" class="mb-12">
+    <!-- Header -->
+    <div class="flex items-center mb-6">
+        <a href="{% url 'home' %}" class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </a>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">Recommended Jobs</h2>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6">
+
+        {% if message %}
+            <p class="text-red-500 text-center mb-4">{{ message }}</p>
+            <div class="text-center">
+                <p  class="text-blue-500 underline font-semibold">Add your skills / experience</p>
+            </div>
+        {% else %}
+            <!-- Jobs List -->
+            <div class="space-y-4 mb-6">
+                {% for item in recommended_jobs %}
+                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-800 text-lg mb-2">{{ item.job.title|title }}</h3>
+                                <p class="text-gray-600 mb-2">{{ item.job.company_name }}</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">{{ item.job.job_type }}</span>
+                                    {% if item.job.salary_min and item.job.salary_max %}
+                                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">${{ item.job.salary_min }}k - ${{ item.job.salary_max }}k</span>
+                                    {% endif %}
+                                    {% if item.reason == "Skills match" %}
+                                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">Skills</span>
+                                    {% elif item.reason == "Experience match" %}
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">Experience</span>
+                                    {% elif item.reason == "Both skills and experience" %}
+                                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">Skills & Experience</span>
+                                    {% else %}
+                                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">No Data</span>
+                                    {% endif %}
+                                </div>
+                                <p class="text-gray-500 text-sm">Posted {{ item.job.posted_at|date:"M d, Y" }} • {{ item.job.city }}, {{ item.job.state }}</p>
+                                <p class="text-gray-500 text-sm mt-1">
+                                    Skill Score: {{ item.skill_score|floatformat:2 }},
+                                    Experience Score: {{ item.experience_score|floatformat:2 }},
+                                    Final Score: {{ item.final_score|floatformat:2 }}
+                                </p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a href="{% url 'job_detail' item.job.job_slug %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold text-sm">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+<!-- ========== RECOMMENDED JOBS PAGE - END ========== -->
+
+{% endblock %}

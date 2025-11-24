@@ -1,0 +1,102 @@
+{% extends "tut/base.html" %}
+{% load static %}
+
+{% load social_time %}
+
+{% block content %}
+
+<!-- ========== JOBS LISTING PAGE - START ========== -->
+<div id="jobs-listing" class="mb-12">
+    <!-- Header -->
+    <div class="flex items-center mb-6">
+        <button class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </button>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">Available Jobs</h2>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <!-- Jobs List -->
+        <div class="space-y-4 mb-6">
+            <!-- Job -->
+            {% for job in jobs %}
+            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 text-lg mb-2">{{job.title|title}}</h3>
+                        <p class="text-gray-600 mb-2">{{job.company_name}}</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">{{job.job_type}}</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">${{job.salary_min}}k - ${{job.salary_max}}k</span>
+                        </div>
+                        <p class="text-gray-500 text-sm">Posted {{ job.posted_at|social_time }} • San Francisco, CA</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-4">
+                    <a href="{% url 'job_detail' job.job_slug %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold text-sm">
+                        View Details
+                    </a>
+                    
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8">
+                <p class="text-gray-500">No jobs found.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if jobs.has_other_pages %}
+        <div class="flex justify-center items-center space-x-2">
+            <!-- Previous Page -->
+            {% if jobs.has_previous %}
+            <a href="?page={{ jobs.previous_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 text-gray-600">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% else %}
+            <span class="px-3 py-2 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                <i class="fas fa-chevron-left"></i>
+            </span>
+            {% endif %}
+
+            <!-- Page Numbers -->
+            {% for i in jobs.paginator.page_range %}
+                {% if jobs.number == i %}
+                <span class="px-3 py-2 bg-blue-500 text-white rounded-lg font-semibold">{{ i }}</span>
+                {% elif i > jobs.number|add:'-3' and i < jobs.number|add:'3' %}
+                <a href="?page={{ i }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 text-gray-600">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Next Page -->
+            {% if jobs.has_next %}
+            <a href="?page={{ jobs.next_page_number }}" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300 text-gray-600">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% else %}
+            <span class="px-3 py-2 border border-gray-300 rounded-lg text-gray-400 cursor-not-allowed">
+                <i class="fas fa-chevron-right"></i>
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Results Info -->
+        <div class="text-center text-gray-500 text-sm mt-4">
+            Showing {{ jobs.start_index }} - {{ jobs.end_index }} of {{ jobs.paginator.count }} jobs
+        </div>
+    </div>
+</div>
+<!-- ========== JOBS LISTING PAGE - END ========== -->
+
+
+
+{% endblock content %}
+
+
+

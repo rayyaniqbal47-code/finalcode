@@ -18,6 +18,10 @@ class SkillForm(forms.ModelForm):
 
     def clean_name(self):
         return self.cleaned_data['name'].strip().lower()
+    
+    def validate_unique(self):
+        # Skip the unique check for name
+        pass
 
 
 

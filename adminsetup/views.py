@@ -8,7 +8,9 @@ from django.utils import timezone
 from django.core.paginator import EmptyPage , PageNotAnInteger , Paginator
 from applications.models import Application
 from accounts.models import CustomUser
-
+from applications.models import Application
+from jobseeker.models import JobBookmark
+from easyaudit.models import CRUDEvent, LoginEvent, RequestEvent
 
 # Create your views here.
 
@@ -158,5 +160,33 @@ def unsuspend_user(request, pk):
         user.save()
     return redirect('jobseeker_users')
 
+from django.contrib.contenttypes.models import ContentType
 
+@login_required
+@user_passes_test(check_admin_perms)
+def admin_audit_dashboard(request):
+    # Get content type IDs for filtering CRUD events
+    app_ct = ContentType.objects.get_for_model(Application)
+    bookmark_ct = ContentType.objects.get_for_model(JobBookmark)
+
+    # Fetch the latest login/logout events
+    login_logs = LoginEvent.objects.all().order_by('-datetime')[:50]
+
+    # Fetch the latest CRUD events for applications and bookmarks
+    crud_logs = CRUDEvent.objects.filter(content_type_id__in=[app_ct.id, bookmark_ct.id]).order_by('-datetime')[:50]
+
+    # Aggregate totals
+    total_users = CustomUser.objects.count()
+    total_applications = Application.objects.count()
+    total_bookmarks = JobBookmark.objects.count()
+
+    context = {
+        'login_logs': login_logs,
+        'crud_logs': crud_logs,
+        'total_users': total_users,
+        'total_applications': total_applications,
+        'total_bookmarks': total_bookmarks,
+    }
+
+    return render(request, 'adminsetup/admin_audit_dashboard.html', context)
 

@@ -15,11 +15,26 @@
                     <h1 class="text-4xl md:text-5xl font-bold mb-4">Find Your Dream Job Today</h1>
                     <p class="text-lg md:text-xl mb-8">Connect with top employers and discover opportunities that match your skills and aspirations.</p>
                     
-                    <div class="bg-white rounded-lg p-2 flex flex-col md:flex-row">
-                        <input type="text" placeholder="Job title, keywords, or company" class="grow p-3 text-gray-800 rounded-lg focus:outline-none">
-                        <input type="text" placeholder="City, state, or remote" class="grow p-3 text-gray-800 rounded-lg focus:outline-none md:mx-2 my-2 md:my-0">
-                        <button class="bg-yellow-500 text-white font-semibold p-3 rounded-lg hover:bg-yellow-600 transition-colors duration-300">Search Jobs</button>
-                    </div>
+                    <form method="get" action="{% url 'job_search' %}" class="bg-white rounded-lg p-2 flex flex-col md:flex-row">
+                        <input 
+                            type="text" 
+                            name="keyword" 
+                            placeholder="Job title, keywords, or company" 
+                            class="grow p-3 text-gray-800 rounded-lg focus:outline-none"
+                            value="{{ request.GET.keyword }}">
+                        
+                        <input 
+                            type="text" 
+                            name="location" 
+                            placeholder="City, state, or remote" 
+                            class="grow p-3 text-gray-800 rounded-lg focus:outline-none md:mx-2 my-2 md:my-0"
+                            value="{{ request.GET.location }}">
+                        
+                        <button type="submit" class="bg-yellow-500 text-white font-semibold p-3 rounded-lg hover:bg-yellow-600 transition-colors duration-300">
+                            Search Jobs
+                        </button>
+                    </form>
+
                 </div>
             </div>
 
