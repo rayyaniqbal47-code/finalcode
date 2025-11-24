@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect , get_object_or_404
 from accounts.forms import CustomUserForm
-from accounts.models import CustomUser
+from accounts.models import CustomUser , CustomUserProfile
 from django.contrib import messages
 from django.contrib import auth
 from accounts.utils import detectuser , send_verification_email
@@ -10,6 +10,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import PasswordChangeForm
+from jobseeker.models import Job , JobBookmark 
+from applications.models import Application
+
 
 # Create your views here.
 
@@ -246,11 +249,42 @@ def myAccount(request):
 @login_required
 @user_passes_test(check_admin_perms)
 def admin_dashboard(request):
-    return render(request , 'accounts/admin_dashboard.html')
+
+
+    applications = Application.objects.all()[:3]
+
+    applications_accepted = Application.objects.filter(status='accepted').count()
+
+    applications_rejected = Application.objects.filter(status='rejected').count()
+
+
+    context = {
+        'applications_counts': applications.count(),
+        'applications':applications,
+        'applications_accepted':applications_accepted,
+        'applications_rejected':applications_rejected,
+    }
+    return render(request , 'accounts/admin_dashboard.html' , context)
+
 
 @login_required
 @user_passes_test(check_jobseeker_perms)
 def jobseeker_dashboard(request):
-    return render(request , 'accounts/jobseeker_dashboard.html')
+
+    profile = get_object_or_404(CustomUserProfile , customuser=request.user)
+
+    applications = Application.objects.filter(jobseeker=profile)[:3]
+
+    applications_counts = applications.count()
+
+    bookmarks = JobBookmark.objects.filter(user=request.user)
+
+    context = {
+        'applications_counts': applications_counts,
+        'bookmarks':bookmarks.count(),
+        'applications':applications
+    }
+
+    return render(request , 'accounts/jobseeker_dashboard.html' , context)
 
 

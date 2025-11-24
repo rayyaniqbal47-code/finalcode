@@ -1,0 +1,76 @@
+{% extends "tut/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- ========== ADMIN USERS MANAGEMENT PAGE - START ========== -->
+<div id="admin-users" class="mb-12">
+    <!-- Header -->
+    <div class="flex items-center mb-6">
+        <a href="{% url 'home' %}" class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </a>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">Manage Users</h2>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <!-- Users List -->
+        {% if users %}
+        <div class="space-y-4">
+            {% for user in users %}
+            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-gray-800 text-lg">{{ user.get_full_name }}</h3>
+                        </div>
+                        <p class="text-gray-600 mb-2">{{ user.email }}</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
+                                {{ user.customuserprofile.total_years_of_experience|floatformat:0 }} years experience
+                            </span>
+                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">
+                                Member since: {{ user.date_joined|date:"M Y" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suspend / Unsuspend buttons -->
+                <div class="flex justify-end space-x-2 mt-4">
+                    {% if not user.is_active %}
+                    <!-- Unsuspend button -->
+                    <form method="POST" action="{% url 'unsuspend_user' user.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300 font-semibold text-sm">
+                            Unsuspend
+                        </button>
+                    </form>
+                    {% else %}
+                    <!-- Suspend button -->
+                    <form method="POST" action="{% url 'suspend_user' user.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300 font-semibold text-sm">
+                            Suspend
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-12">
+            <i class="fas fa-users text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-600 mb-2">No users found</h3>
+            <p class="text-gray-500">There are no users in the system.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- ========== ADMIN USERS MANAGEMENT PAGE - END ========== -->
+
+{% endblock content %}

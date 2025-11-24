@@ -1,0 +1,112 @@
+{% extends "tut/base.html" %}
+
+{% block content %}
+<!-- ========== ADMIN APPLICATIONS PAGE - START ========== -->
+<div id="admin-applications" class="mb-12">
+    <!-- Header -->
+    <div class="flex items-center mb-6">
+        <button onclick="window.history.back()" class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </button>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">Manage Applications</h2>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <!-- Applications List -->
+        <div class="space-y-4">
+            {% for application in applications %}
+            <!-- Application Item -->
+            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-gray-800 text-lg">{{ application.job.title|title }}</h3>
+                            <span class="{% if application.status == 'pending' %}bg-yellow-100 text-yellow-800{% elif application.status == 'accepted' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} px-3 py-1 rounded-full text-sm">
+                                {{ application.status|title }}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-2">{{ application.job.company }}</p>
+                        <div class="flex items-center text-gray-500 text-sm mb-3">
+                            <span class="font-medium mr-2">Applicant:</span>
+                            {{ application.jobseeker.customuser.get_full_name }} • {{ application.jobseeker.customuser.email }}
+                        </div>
+                        <p class="text-gray-500 text-sm">Applied on: {{ application.applied_at|date:"d M Y" }}</p>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-4">
+                    <a href="{{ application.resume.url }}" target="_blank" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold text-sm px-4 py-2 border border-blue-500 rounded-lg hover:bg-blue-50">
+                        View Resume
+                    </a>
+                    
+                    {% if application.status == 'pending' %}
+                    <form method="POST" action="{% url 'reject_application' application.id %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300 font-semibold text-sm">
+                            Reject
+                        </button>
+                    </form>
+                    <form method="POST" action="{% url 'accept_application' application.id %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300 font-semibold text-sm">
+                            Accept
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <!-- Empty State -->
+            <div class="text-center py-12">
+                <i class="fas fa-users text-gray-300 text-5xl mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-600 mb-2">No applications to review</h3>
+                <p class="text-gray-500">All applications have been processed.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if applications.has_other_pages %}
+        
+        <div class="flex justify-center items-center space-x-2 mt-8">
+            {% if applications.has_previous %}
+                <a href="?page={{ applications.previous_page_number }}"
+                class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% else %}
+                <button class="px-3 py-2 border border-gray-300 rounded-lg opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            {% endif %}
+
+            <!-- Page numbers -->
+            {% for num in applications.paginator.page_range %}
+                {% if applications.number == num %}
+                    <button class="px-3 py-2 bg-blue-500 text-white rounded-lg">{{ num }}</button>
+                {% else %}
+                    <a href="?page={{ num }}"
+                    class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                        {{ num }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if applications.has_next %}
+                <a href="?page={{ applications.next_page_number }}"
+                class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% else %}
+                <button class="px-3 py-2 border border-gray-300 rounded-lg opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- ========== ADMIN APPLICATIONS PAGE - END ========== -->
+{% endblock content %}
+
+

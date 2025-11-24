@@ -6,6 +6,9 @@ from accounts.views import check_admin_perms
 from django.template.defaultfilters import slugify
 from django.utils import timezone 
 from django.core.paginator import EmptyPage , PageNotAnInteger , Paginator
+from applications.models import Application
+from accounts.models import CustomUser
+
 
 # Create your views here.
 
@@ -89,4 +92,71 @@ def all_jobs_admin_dashboard(request):
         'jobs':paged_jobs,
     }
     return render(request, 'adminsetup/all_jobs_admin_dashboard.html' , context)    
+
+
+@login_required
+@user_passes_test(check_admin_perms)
+def applications(request):
+    applications = Application.objects.select_related('job', 'jobseeker').order_by('-applied_at')
+
+    paginator = Paginator(applications, 1)  
+    page_number = request.GET.get('page')
+    applications_page = paginator.get_page(page_number)
+
+    context = {
+        'applications':applications_page,
+    }
+    return render(request, 'adminsetup/applications.html' , context)
+
+
+@login_required
+@user_passes_test(check_admin_perms)
+def accept_application(request, pk):
+    application = get_object_or_404(Application, id=pk)
+    application.status = "accepted"
+    application.save()
+    return redirect('applications')
+
+
+@login_required
+@user_passes_test(check_admin_perms)
+def reject_application(request, pk):
+    application = get_object_or_404(Application, id=pk)
+    application.status = "rejected"
+    application.save()
+    return redirect('applications')
+
+
+@login_required
+@user_passes_test(check_admin_perms)
+def jobseeker_users(request):
+    users = CustomUser.objects.filter(is_job_seeker=True)
+    context = {
+        'users':users,
+    }
+    return render(request, 'adminsetup/jobseeker_users.html' , context)
+
+
+@login_required
+@user_passes_test(check_admin_perms)
+def suspend_user(request, pk):
+    if request.method == 'POST':
+        user = get_object_or_404(CustomUser, id=pk)
+        user.is_active = False
+        user.is_suspended = True  
+        user.save()
+    return redirect('jobseeker_users')
+
+
+@login_required
+@user_passes_test(check_admin_perms)
+def unsuspend_user(request, pk):
+    if request.method == 'POST':
+        user = get_object_or_404(CustomUser, id=pk)
+        user.is_active = True  
+        user.is_suspended = False
+        user.save()
+    return redirect('jobseeker_users')
+
+
 

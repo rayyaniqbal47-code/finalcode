@@ -3,10 +3,13 @@ from accounts.models import CustomUserProfile , CustomUser
 from jobseeker.forms import JobSeekerCustomUserForm , JobSeekerProfileForm
 from django.contrib.auth.decorators import login_required , user_passes_test
 from accounts.views import check_jobseeker_perms
-from jobseeker.models import Experience , Education
+from jobseeker.models import Experience , Education , JobBookmark
 from jobseeker.forms import ExperienceForm , EducationForm
 from skill.forms import SkillForm
 from skill.models import Skill
+from adminsetup.models import Job
+from applications.models import Application
+from django.contrib import messages
 
 
 # Create your views here.
@@ -223,6 +226,83 @@ def delete_skill(request , pk):
     exp.delete()
 
     return redirect('profile')
+
+@login_required
+@user_passes_test(check_jobseeker_perms)
+def apply_job(request, job_id):
+    
+    job = get_object_or_404(Job, id=job_id)
+    jobseeker = request.user.customuserprofile
+
+    if not jobseeker.resume:
+        messages.error(request, "Please upload a resume before applying to a job.")
+        return redirect('edit_jobseekerprofile')
+    
+    if request.method == "POST":
+
+        application, created = Application.objects.get_or_create(
+            job=job,
+            jobseeker=jobseeker,
+            defaults={'resume': jobseeker.resume , 'status': 'pending'}
+        )
+
+        if created:
+            messages.success(request, "Application submitted successfully!")
+        else:
+            messages.info(request, "You have already applied for this job.")
+
+
+    return redirect('job_detail', job_slug=job.job_slug)
+
+
+@login_required
+@user_passes_test(check_jobseeker_perms)
+def list_bookmarks(request):
+
+    bookmarks = JobBookmark.objects.filter(user=request.user).select_related('job')
+
+    context = {
+        'bookmarks': bookmarks,
+    }
+    return render(request , 'jobseeker/bookmark_jobs.html' , context)
+
+
+@login_required
+@user_passes_test(check_jobseeker_perms)
+def add_bookmark(request, job_id):
+
+    job = get_object_or_404(Job, id=job_id)
+    JobBookmark.objects.get_or_create(user=request.user, job=job)
+
+    return redirect('job_detail', job_slug=job.job_slug)
+
+
+
+@login_required
+@user_passes_test(check_jobseeker_perms)
+def remove_bookmark(request, job_id):
+
+    job = get_object_or_404(Job, id=job_id)
+    JobBookmark.objects.filter(user=request.user, job=job).delete()
+
+    return redirect('job_detail', job_slug=job.job_slug)
+
+
+@login_required
+@user_passes_test(check_jobseeker_perms)
+def my_application(request):
+
+
+    profile = get_object_or_404(CustomUserProfile , customuser=request.user)
+
+    applications = Application.objects.filter(jobseeker=profile)
+
+    context = {
+        'applications': applications,
+    }
+    return render(request , 'jobseeker/my_application.html' , context)
+
+
 
 
 

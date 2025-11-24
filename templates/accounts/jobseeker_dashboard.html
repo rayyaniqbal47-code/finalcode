@@ -27,15 +27,15 @@
                                 <span>Profile</span>
                             </a>
 
-                            <a href="#" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                            <a href="{% url 'my_application' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
                                 <i class="fas fa-file-alt mr-3"></i>
                                 <span>My Applications</span>
                             </a>
 
-                            <li class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
+                            <a href="{% url 'list_bookmarks' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
                                 <i class="fas fa-bookmark mr-3"></i>
                                 <span>Saved Jobs</span>
-                            </li>
+                            </a>
 
                             <a href="{% url 'add_skill' %}" class="flex items-center p-3 text-gray-700 hover:bg-gray-200 rounded-lg transition-colors duration-300">
                                 <i class="fas fa-tools mr-3"></i>
@@ -70,18 +70,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
                                 <h3 class="font-bold text-gray-800">Applications</h3>
-                                <p class="text-2xl font-bold text-blue-500">12</p>
-                                <p class="text-sm text-gray-600">+2 this week</p>
+                                <p class="text-2xl font-bold text-blue-500">{{applications_counts}}</p>
+                                
                             </div>
-                            <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
-                                <h3 class="font-bold text-gray-800">Interviews</h3>
-                                <p class="text-2xl font-bold text-green-500">3</p>
-                                <p class="text-sm text-gray-600">+1 this week</p>
-                            </div>
+                            
                             <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
                                 <h3 class="font-bold text-gray-800">Saved Jobs</h3>
-                                <p class="text-2xl font-bold text-purple-500">8</p>
-                                <p class="text-sm text-gray-600">+3 this week</p>
+                                <p class="text-2xl font-bold text-purple-500">{{bookmarks}}</p>
                             </div>
                         </div>
                         
@@ -89,31 +84,31 @@
                         <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="font-bold text-gray-800 text-lg">Recent Applications</h3>
-                                <a href="#" class="text-blue-500 hover:text-blue-700 text-sm font-semibold">View All</a>
+                                <a href="{% url 'my_application' %}" class="text-blue-500 hover:text-blue-700 text-sm font-semibold">View All</a>
                             </div>
                             <div class="overflow-x-auto">
                                 <table class="w-full">
                                     <thead>
+                                        
                                         <tr class="border-b border-gray-200">
                                             <th class="text-left py-2 text-gray-600 font-medium">Position</th>
                                             <th class="text-left py-2 text-gray-600 font-medium">Company</th>
                                             <th class="text-left py-2 text-gray-600 font-medium">Date</th>
                                             <th class="text-left py-2 text-gray-600 font-medium">Status</th>
                                         </tr>
+                                        
                                     </thead>
                                     <tbody>
+                                        {% if applications %}
+                                        {% for app in applications %}
                                         <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                            <td class="py-3 font-medium">Senior UX Designer</td>
-                                            <td class="py-3 text-gray-600">DesignHub</td>
-                                            <td class="py-3 text-gray-600">Jun 12, 2023</td>
-                                            <td class="py-3"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Under Review</span></td>
+                                            <td class="py-3 font-medium">{{app.job.title|title}}</td>
+                                            <td class="py-3 text-gray-600">{{app.job.company_name}}</td>
+                                            <td class="py-3 text-gray-600">{{ app.applied_at|date:"d M Y" }}</td>
+                                            <td class="py-3"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">{{app.status}}</span></td>
                                         </tr>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                            <td class="py-3 font-medium">Product Manager</td>
-                                            <td class="py-3 text-gray-600">TechInnovate</td>
-                                            <td class="py-3 text-gray-600">Jun 5, 2023</td>
-                                            <td class="py-3"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Interview</span></td>
-                                        </tr>
+                                        {% endfor %}
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </div>

@@ -71,6 +71,10 @@ class CustomUser(AbstractBaseUser):
     REQUIRED_FIELDS = ['username' , 'first_name' , 'last_name']
 
     objects = CustomUserManager()
+
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}" 
     
 
     def __str__(self):

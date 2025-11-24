@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'skill',
     'adminsetup',
     'jobseeker',
+    'applications',
+    'django_extensions',
 ]
 
 

@@ -1,0 +1,81 @@
+{% extends "tut/base.html" %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+
+<!-- ========== APPLIED JOBS PAGE - START ========== -->
+<div id="applied-jobs" class="mb-12">
+    <!-- Header with Back Button -->
+    <div class="flex items-center mb-6">
+        <button class="flex items-center text-blue-500 hover:text-blue-700 transition-colors duration-300 mr-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back
+        </button>
+        <h2 class="text-2xl font-bold text-gray-800 text-center flex-1">Applied Jobs</h2>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <!-- Applied Jobs List -->
+        <div class="space-y-4">
+            <!-- Jobs -->
+            {% if applications %}
+            {% for app in applications %}
+            <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors duration-300">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 text-lg mb-2">{{app.job.title|title}}</h3>
+                        <p class="text-gray-600 mb-2">{{app.job.company_name}}</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">{{app.job.job_type}}</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">${{ app.job.salary_min }} - ${{ app.job.salary_max }}</span>
+                        </div>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs mr-2">{{app.status}}</span>
+                            <span>Applied on: {{ app.applied_at|date:"d M Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-4">
+                    <a href="{% url 'job_detail' app.job.job_slug %}" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 font-semibold text-sm">
+                        View Details
+                    </a>
+                    
+                </div>
+            </div>
+            {% endfor %}            
+            {% endif %}
+
+
+        </div>
+
+        <!-- Empty State -->
+        <div class="text-center py-12 hidden">
+            <i class="fas fa-file-alt text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-600 mb-2">No applications yet</h3>
+            <p class="text-gray-500 mb-4">Start applying to jobs to track your applications here.</p>
+            <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300 font-semibold">
+                Browse Jobs
+            </button>
+        </div>
+    </div>
+</div>
+<!-- ========== APPLIED JOBS PAGE - END ========== -->
+
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+

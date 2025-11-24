@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Experience , Education
+from .models import Experience , Education , JobBookmark
 
 # Register your models here.
 
@@ -23,5 +23,15 @@ class EducationAdmin(admin.ModelAdmin):
     ordering = ('-start_year',)
 
 admin.site.register(Education , EducationAdmin)
+
+
+class JobBookmarkAdmin(admin.ModelAdmin):
+    list_display = ('user', 'job', 'created_at')
+    list_filter = ('created_at', 'user')
+    search_fields = ('user__email', 'job__title')
+    ordering = ('-created_at',)
+
+
+admin.site.register(JobBookmark , JobBookmarkAdmin)
 
 

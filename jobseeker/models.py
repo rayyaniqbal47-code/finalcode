@@ -1,6 +1,8 @@
 from django.db import models
 from accounts.models import CustomUserProfile
 from django.core.exceptions import ValidationError
+from accounts.models import CustomUser
+from adminsetup.models import Job
 
 # Create your models here.
 
@@ -40,6 +42,22 @@ class Education(models.Model):
                 "start_year": "Start year cannot be greater than end year.",
                 "end_year": "End year cannot be less than start year."
             })
+
+
+class JobBookmark(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="bookmarked_jobs")
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="bookmarked_by")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'job'], name='unique_user_job_bookmark')
+        ]
+
+    def __str__(self):
+        return f"{self.user.email} bookmarked {self.job.title}"
+
+
 
 
 
